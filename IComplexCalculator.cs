@@ -8,7 +8,6 @@ using System.Text;
 
 namespace Lab1Wcf
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
     [ServiceContract]
     public interface IComplexCalculator
     {
@@ -26,9 +25,11 @@ namespace Lab1Wcf
         Complex Substract(double ar, double ai, double br, double bi);
 
         [OperationContract (Name = "DivideComplexData")]
+        [FaultContract(typeof(DivideByZeroException))]
         Complex Divide(Complex a, Complex b);
 
         [OperationContract (Name = "DivideDoubleData")]
+        [FaultContract(typeof(DivideByZeroException))]
         Complex Divide(double ar, double ai, double br, double bi);
 
         [OperationContract (Name = "MultiplyComplexData")]
@@ -37,11 +38,20 @@ namespace Lab1Wcf
         [OperationContract (Name = "MultiplyDoubleData")]
         Complex Multiply(double ar, double ai, double br, double bi);
 
-        // TODO: Add your service operations here
     }
 
+    [DataContract]
+    public class DivideByZeroException
+    {
+        [DataMember]
+        public string Message { get; set; }
+        [DataMember]
+        public string Details { get; set; }
 
-    // Use a data contract as illustrated in the sample below to add composite types to service operations.
+        [DataMember]
+        public Complex Divident { get; set; }
+    }
+
     [DataContract]
     public class Complex
     {
